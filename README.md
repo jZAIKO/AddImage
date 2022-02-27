@@ -14,7 +14,7 @@ allprojects {
   > Step 2. Add the dependency
 ```gradle
 dependencies {
-	        implementation 'com.github.jZAIKO:AddImage:Tag'
+	        implementation 'com.github.jZAIKO:AddImage:1.0.0'
 	}
   ```
   

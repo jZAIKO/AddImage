@@ -1,3 +1,5 @@
+[![](https://jitpack.io/v/jZAIKO/AddImage.svg)](https://jitpack.io/#jZAIKO/AddImage)
+
 ## AddImage
 Simple mover, rotar, escalar imagen
 > Step 1. Add the JitPack repository to your build file

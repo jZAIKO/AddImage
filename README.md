@@ -19,8 +19,36 @@ dependencies {
 	        implementation 'com.github.jZAIKO:AddImage:1.0.1'
 	}
   ```
-  
-  
+
+## XML - Vista
+
+```
+
+```
+
+
+## Metodos
+> llamar método para añadir la imagen
+```
+addImagen(@NonNull Context context, Bitmap bitmap)
+```
+> llamar método para obtener el total de items añadidos
+```
+getSize()
+```
+> llamar método para eliminar todos los items añadidos
+```
+EliminarAllImagen()
+```
+> llamar método para eliminar uno por uno los items añadidos
+```
+iminarImagen()
+```
+> establesca un nuevo color para el fondo
+```
+setColor(String newColor)
+```
+
 ### License
 
 ```

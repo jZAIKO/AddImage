@@ -23,11 +23,11 @@ public abstract class EntradaMultiTouch implements Serializable {
     protected int mDisplayWidth;
     protected int mDisplayHeight;
 
-    protected float mCenterX;
-    protected float mCenterY;
-    protected float mScaleX;
-    protected float mScaleY;
-    protected float mAngle;
+    protected float mCentroX;
+    protected float mCentroY;
+    protected float mEscalaX;
+    protected float mEscalaY;
+    protected float mAngulo;
 
     protected float mMinX;
     protected float mMaxX;
@@ -118,11 +118,11 @@ public abstract class EntradaMultiTouch implements Serializable {
         mGrabAreaX2 = mMaxX;
         mGrabAreaY2 = mMaxY;
 
-        mCenterX = centerX;
-        mCenterY = centerY;
-        mScaleX = scaleX;
-        mScaleY = scaleY;
-        mAngle = angle;
+        mCentroX = centerX;
+        mCentroY = centerY;
+        mEscalaX = scaleX;
+        mEscalaY = scaleY;
+        mAngulo = angle;
 
         return true;
     }
@@ -143,7 +143,7 @@ public abstract class EntradaMultiTouch implements Serializable {
         // Hágale saber a la carga que las propiedades han cambiado, así que vuelva a cargarlas,
         // no retroceda y comience con los valores predeterminados
         mFirstLoad = false;
-        load(context, mCenterX, mCenterY);
+        load(context, mCentroX, mCentroY);
     }
 
     public abstract void draw(Canvas canvas);
@@ -161,23 +161,23 @@ public abstract class EntradaMultiTouch implements Serializable {
     }
 
     public float getCenterX() {
-        return mCenterX;
+        return mCentroX;
     }
 
     public float getCenterY() {
-        return mCenterY;
+        return mCentroY;
     }
 
     public float getScaleX() {
-        return mScaleX;
+        return mEscalaX;
     }
 
     public float getScaleY() {
-        return mScaleY;
+        return mEscalaY;
     }
 
     public float getAngle() {
-        return mAngle;
+        return mAngulo;
     }
 
     public float getMinX() {

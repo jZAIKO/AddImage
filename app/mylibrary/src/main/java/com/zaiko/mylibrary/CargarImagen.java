@@ -10,7 +10,7 @@ import android.graphics.drawable.Drawable;
 import androidx.annotation.NonNull;
 
 public class CargarImagen extends EntradaMultiTouch {
-    private static final double INITIAL_SCALE_FACTOR = 0.15;
+    private static final double ESCALAFACTORINICIAL = 0.15;
     private transient Drawable mDrawable;
     private final Bitmap mBitmap;
 
@@ -21,14 +21,13 @@ public class CargarImagen extends EntradaMultiTouch {
 
     public CargarImagen(@NonNull CargarImagen e, Resources res) {
         super(res);
-
         mDrawable = e.mDrawable;
         mBitmap = e.mBitmap;
-        mScaleX = e.mScaleX;
-        mScaleY = e.mScaleY;
-        mCenterX = e.mCenterX;
-        mCenterY = e.mCenterY;
-        mAngle = e.mAngle;
+        mEscalaX = e.mEscalaX;
+        mEscalaY = e.mEscalaY;
+        mCentroX = e.mCentroX;
+        mCentroY = e.mCentroY;
+        mAngulo = e.mAngulo;
     }
 
     @Override
@@ -39,7 +38,7 @@ public class CargarImagen extends EntradaMultiTouch {
 
         mDrawable.setBounds((int) mMinX, (int) mMinY, (int) mMaxX, (int) mMaxY);
         canvas.translate(dx, dy);
-        canvas.rotate(mAngle * 180.0f / (float) Math.PI);
+        canvas.rotate(mAngulo * 180.0f / (float) Math.PI);
         canvas.translate(-dx, -dy);
         mDrawable.draw(canvas);
         canvas.restore();
@@ -58,29 +57,29 @@ public class CargarImagen extends EntradaMultiTouch {
         mWidth = mDrawable.getIntrinsicWidth();
         mHeight = mDrawable.getIntrinsicHeight();
 
-        float centerX;
-        float centerY;
-        float scaleX;
-        float scaleY;
+        float centroX;
+        float centroY;
+        float escalaX;
+        float escalaY;
         float angle;
         if (mFirstLoad) {
-            centerX = startMidX;
-            centerY = startMidY;
+            centroX = startMidX;
+            centroY = startMidY;
 
             float scaleFactor = (float) (Math.max(mDisplayWidth, mDisplayHeight) /
-                    (float) Math.max(mWidth, mHeight) * INITIAL_SCALE_FACTOR);
-            scaleX = scaleY = scaleFactor;
+                    (float) Math.max(mWidth, mHeight) * ESCALAFACTORINICIAL);
+            escalaX = escalaY = scaleFactor;
             angle = 0.0f;
 
             mFirstLoad = false;
         } else {
-            centerX = mCenterX;
-            centerY = mCenterY;
-            scaleX = mScaleX;
-            scaleY = mScaleY;
-            angle = mAngle;
+            centroX = mCentroX;
+            centroY = mCentroY;
+            escalaX = mEscalaX;
+            escalaY = mEscalaY;
+            angle = mAngulo;
         }
-        setPosicion(centerX, centerY, scaleX, scaleY, mAngle);
+        setPosicion(centroX, centroY, escalaX, escalaY, mAngulo);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.zaiko.mylibrary;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -20,9 +21,9 @@ import java.util.ArrayList;
 
 public class ImagenView extends View implements ControlesMultiTouch.MultiTouchObjectCanvas<EntradaMultiTouch> {
     private Path drawPath;
-    // drawing and canvas paint
+    // dibujo y pintura de lienzo
     private Paint drawPaint, canvasPaint;
-    // initial color
+    // color inicial
     private int paintColor = Color.TRANSPARENT;
     // canvas
     private Canvas drawCanvas;
@@ -108,8 +109,33 @@ public class ImagenView extends View implements ControlesMultiTouch.MultiTouchOb
         if (imageIDs.size() > 0) {
             imageIDs.remove(imageIDs.size() - 1);
         }
-
         invalidate();
+    }
+
+    /**
+     * establesca un nuevo color para el fondo
+     * @param newColor
+     */
+    public void setColor(String newColor) {
+        invalidate();
+        paintColor = Color.parseColor(newColor);
+        drawPaint.setColor(paintColor);
+    }
+
+    /**
+     * Limpiar el canvas
+     */
+    public void LimpiarCanvas() {
+        drawCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+        invalidate();
+
+    }
+
+    /**
+     * Establecer el dibujo en transparente
+     */
+    public void setTranspertColor() {
+        drawPaint.setColor(Color.TRANSPARENT);
     }
 
     @Override
@@ -130,11 +156,12 @@ public class ImagenView extends View implements ControlesMultiTouch.MultiTouchOb
     /**
      * Pass touch events to the MT controller
      */
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         float touchX = event.getX();
         float touchY = event.getY();
-        // respond to down, move and up events
+        // responder a eventos de bajada, movimiento y subida
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 drawPath.moveTo(touchX, touchY);
@@ -217,8 +244,8 @@ public class ImagenView extends View implements ControlesMultiTouch.MultiTouchOb
         return false;
     }
 
+    //prepararse para dibujar y configurar las propiedades del trazo de pintura
     private void setupDrawing() {
-        //prepararse para dibujar y configurar las propiedades del trazo de pintura
         drawPath = new Path();
         drawPaint = new Paint();
         drawPaint.setColor(paintColor);
@@ -230,7 +257,7 @@ public class ImagenView extends View implements ControlesMultiTouch.MultiTouchOb
         canvasPaint = new Paint(Paint.DITHER_FLAG);
     }
 
-    // size assigned to view
+    // tamaño asignado para ver
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         if (w > 0 && h > 0) {
@@ -239,31 +266,4 @@ public class ImagenView extends View implements ControlesMultiTouch.MultiTouchOb
             drawCanvas = new Canvas(canvasBitmap);
         }
     }
-
-    /**
-     * establesca un nuevo color para el fondo
-     * @param newColor
-     */
-    public void setColor(String newColor) {
-        invalidate();
-        paintColor = Color.parseColor(newColor);
-        drawPaint.setColor(paintColor);
-    }
-
-    /**
-     * Limpiar el canvas
-     */
-    public void LimpiarCanvas() {
-        drawCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-        invalidate();
-
-    }
-
-    /**
-     * Establecer el dibujo en transparente
-     */
-    public void setTranspertColor() {
-        drawPaint.setColor(Color.TRANSPARENT);
-    }
-
 }

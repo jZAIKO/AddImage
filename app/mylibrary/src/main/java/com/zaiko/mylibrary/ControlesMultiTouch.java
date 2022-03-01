@@ -3,6 +3,8 @@ package com.zaiko.mylibrary;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import androidx.annotation.NonNull;
+
 import java.lang.reflect.Method;
 
 public class ControlesMultiTouch<T> {
@@ -33,8 +35,8 @@ public class ControlesMultiTouch<T> {
             mCurrPtHeight, mCurrPtAng;
 
     private void extractCurrPtInfo() {
-        // Get new drag/pinch params. Only read multitouch fields that are needed,
-        // to avoid unnecessary computation (diameter and angle are expensive operations).
+        // Obtenga nuevos parámetros de arrastrar/pellizcar. Solo lea los campos multitáctiles que se necesitan,
+        // para evitar cálculos innecesarios (diámetro y ángulo son operaciones costosas).
         mCurrPtX = mCurrPt.getX();
         mCurrPtY = mCurrPt.getY();
         mCurrPtDiam = Math.max(MIN_MULTITOUCH_SEPARATION * .71f,
@@ -48,24 +50,24 @@ public class ControlesMultiTouch<T> {
 
     private boolean handleSingleTouchEvents;
     /**
-     * The object being dragged/stretched
+     * objeto arrastrado/estirado
      */
     private T selectedObject = null;
 
     /**
-     * Current position and scale of the dragged object
+     * Posición actual y escala del objeto arrastrado
      */
     private final PositionAndScale mCurrXform = new PositionAndScale();
 
     private long mSettleEndTime;
 
     /**
-     * Conversion from object coords to screen coords
+     * Conversión de coordenadas de objeto a coordenadas de pantalla
      */
     private float startPosX, startPosY;
 
     /**
-     * Conversion between scale and width, and object angle and start pinch angle
+     * Conversión entre escala y ancho, y ángulo del objeto y ángulo de pellizco inicial
      */
     private float startScaleOverPinchDiam, startAngleMinusPinchAngle;
 
@@ -573,10 +575,10 @@ public class ControlesMultiTouch<T> {
     public static class PointInfo {
         // Multitouch information
         private int numPoints;
-        private float[] xs = new float[MAX_TOUCH_POINTS];
-        private float[] ys = new float[MAX_TOUCH_POINTS];
-        private float[] pressures = new float[MAX_TOUCH_POINTS];
-        private int[] pointerIds = new int[MAX_TOUCH_POINTS];
+        private final float[] xs = new float[MAX_TOUCH_POINTS];
+        private final float[] ys = new float[MAX_TOUCH_POINTS];
+        private final float[] pressures = new float[MAX_TOUCH_POINTS];
+        private final int[] pointerIds = new int[MAX_TOUCH_POINTS];
 
         // Midpoint of pinch operations
         private float xMid, yMid, pressureMid;
@@ -642,7 +644,7 @@ public class ControlesMultiTouch<T> {
          * are volatile so you should use this if you want to keep track of the last
          * touch event in your own code.
          */
-        public void set(PointInfo other) {
+        public void set(@NonNull PointInfo other) {
             this.numPoints = other.numPoints;
             for (int i = 0; i < numPoints; i++) {
                 this.xs[i] = other.xs[i];

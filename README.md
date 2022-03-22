@@ -16,7 +16,7 @@ allprojects {
   > Step 2. Add the dependency
 ```gradle
 dependencies {
-	        implementation 'com.github.jZAIKO:AddImage:1.0.1'
+	        implementation 'com.github.jZAIKO:AddImage:1.0.2'
 	}
   ```
 
@@ -38,13 +38,13 @@ getSize()
 ```
 > llamar método para eliminar todos los items añadidos
 ```
-EliminarAllImagen()
+eliminarAllImagen()
 ```
 > llamar método para eliminar uno por uno los items añadidos
 ```
-iminarImagen()
+eiminarImagen()
 ```
-> establesca un nuevo color para el fondo
+> establezca un nuevo color para el fondo
 ```
 setColor(String newColor)
 ```

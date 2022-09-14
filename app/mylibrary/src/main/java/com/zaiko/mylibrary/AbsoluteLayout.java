@@ -5,8 +5,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-
 public class AbsoluteLayout extends ViewGroup {
 
     public AbsoluteLayout(Context context) {
@@ -19,15 +17,15 @@ public class AbsoluteLayout extends ViewGroup {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int count = getChildCount();
-        int maxHeight = 0;
-        int maxWidth = 0;
+        int totalHijos = getChildCount();
+        int maximoAltura = 0;
+        int maximoAnchura = 0;
 
         // Descubre lo grande que todas quieren ser
         measureChildren(widthMeasureSpec, heightMeasureSpec);
 
         // Encuentra al niño más a la derecha y más abajo.
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < totalHijos; i++) {
             View child = getChildAt(i);
             if (child.getVisibility() != GONE) {
                 int childRight;
@@ -39,28 +37,28 @@ public class AbsoluteLayout extends ViewGroup {
                 childRight = lp.x + child.getMeasuredWidth();
                 childBottom = lp.y + child.getMeasuredHeight();
 
-                maxWidth = Math.max(maxWidth, childRight);
-                maxHeight = Math.max(maxHeight, childBottom);
+                maximoAnchura = Math.max(maximoAnchura, childRight);
+                maximoAltura = Math.max(maximoAltura, childBottom);
             }
         }
 
         // Cuenta para relleno también
-        maxWidth += getPaddingLeft() + getPaddingRight();
-        maxHeight += getPaddingTop() + getPaddingBottom();
+        maximoAnchura += getPaddingLeft() + getPaddingRight();
+        maximoAltura += getPaddingTop() + getPaddingBottom();
 
         // Comprobar con la altura y el ancho mínimos
-        maxHeight = Math.max(maxHeight, getSuggestedMinimumHeight());
-        maxWidth = Math.max(maxWidth, getSuggestedMinimumWidth());
+        maximoAltura = Math.max(maximoAltura, getSuggestedMinimumHeight());
+        maximoAnchura = Math.max(maximoAnchura, getSuggestedMinimumWidth());
 
-        setMeasuredDimension(resolveSize(maxWidth, widthMeasureSpec),
-                resolveSize(maxHeight, heightMeasureSpec));
+        setMeasuredDimension(resolveSize(maximoAnchura, widthMeasureSpec),
+                resolveSize(maximoAltura, heightMeasureSpec));
     }
 
     /**
-     * Returns a set of layout parameters with a width of
+     * Devuelve un conjunto de parámetros de diseño con un ancho de
      * {@link android.view.ViewGroup.LayoutParams#WRAP_CONTENT},
-     * a height of {@link android.view.ViewGroup.LayoutParams#WRAP_CONTENT}
-     * and with the coordinates (0, 0).
+     * una altura de {@link android.view.ViewGroup.LayoutParams#WRAP_CONTENT}
+     * y con las coordenadas (0, 0).
      */
     @Override
     protected ViewGroup.LayoutParams generateDefaultLayoutParams() {
@@ -86,7 +84,6 @@ public class AbsoluteLayout extends ViewGroup {
                 child.layout(childLeft, childTop,
                         childLeft + child.getMeasuredWidth(),
                         childTop + child.getMeasuredHeight());
-
             }
         }
     }
@@ -124,22 +121,6 @@ public class AbsoluteLayout extends ViewGroup {
             super(source);
         }
 
-        public String debug(String output) {
-            return output + "Absolute.LayoutParams={width="
-                    + sizeToString(width) + ", height=" + sizeToString(height)
-                    + " x=" + x + " y=" + y + "}";
-        }
-
-        @NonNull
-        protected static String sizeToString(int size) {
-            if (size == WRAP_CONTENT) {
-                return "wrap-content";
-            }
-            if (size == MATCH_PARENT) {
-                return "match-parent";
-            }
-            return String.valueOf(size);
-        }
     }
 }
 

@@ -19,17 +19,17 @@ public class ControlesMultiTouch<T> {
     MultiTouchObjectCanvas<T> objectCanvas;
 
     /**
-     * The current touch point
+     * El punto de contacto actual
      */
     private PointInfo mCurrPt;
 
     /**
-     * The previous touch point
+     * El punto de contacto anterior
      */
     private PointInfo mPrevPt;
 
     /**
-     * Fields extracted from mCurrPt
+     * Campos extraídos de mCurrPt
      */
     private float mCurrPtX, mCurrPtY, mCurrPtDiam, mCurrPtWidth,
             mCurrPtHeight, mCurrPtAng;
@@ -183,6 +183,7 @@ public class ControlesMultiTouch<T> {
                 ACTION_POINTER_INDEX_SHIFT = MotionEvent.class
                         .getField("ACTION_POINTER_INDEX_SHIFT").getInt(null);
             } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -421,10 +422,6 @@ public class ControlesMultiTouch<T> {
                     mCurrPt.getNumTouchPoints() + " " + mCurrPt.isDown() +
                     mCurrPt.isMultiTouch());
 
-        /**
-         * Drag/pinch start time and time to ignore spurious events until
-         * (to smooth over event noise)
-         */
         long mSettleStartTime;
         switch (mMode) {
             case MODE_NOTHING:

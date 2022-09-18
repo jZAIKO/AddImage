@@ -12,22 +12,22 @@ import androidx.annotation.NonNull;
 import java.io.Serializable;
 
 public abstract class EntradaMultiTouch implements Serializable {
-    protected boolean mFirstLoad = true;
+    protected boolean primeraCarga = true;
 
-    protected transient Paint mPaint = new Paint();
+    protected transient Paint paint = new Paint();
 
-    protected int mWidth;
-    protected int mHeight;
+    protected int ancho;
+    protected int altura;
 
-    // width/height de la pantalla
-    protected int mDisplayWidth;
-    protected int mDisplayHeight;
+    // anchura/altura de la pantalla
+    protected int anchoPantalla;
+    protected int alturaPantalla;
 
-    protected float mCentroX;
-    protected float mCentroY;
-    protected float mEscalaX;
-    protected float mEscalaY;
-    protected float mAngulo;
+    protected float posicionCentroX;
+    protected float posicionCentroY;
+    protected float escalaPosicionX;
+    protected float escalaPosicionY;
+    protected float angulo;
 
     protected float mMinX;
     protected float mMaxX;
@@ -38,7 +38,7 @@ public abstract class EntradaMultiTouch implements Serializable {
      * área de la entidad que se puede escalar/rotar
      * usando un solo toque (crece desde abajo a la derecha)
      */
-    protected final static int GRAB_AREA_SIZE = 40;
+    protected final static int TAMANIO_GRAVEDAD_AREA = 40;
     protected boolean mIsGrabAreaSeleccionar = false;
     protected boolean mIsLatestSeleccionar = false;
 
@@ -62,13 +62,58 @@ public abstract class EntradaMultiTouch implements Serializable {
         getMetricas(resources);
     }
 
+    public int getAncho() {
+        return ancho;
+    }
+
+    public int getAltura() {
+        return altura;
+    }
+
+    public float getPosicionCentroX() {
+        return posicionCentroX;
+    }
+
+    public float getPosicionCentroY() {
+        return posicionCentroY;
+    }
+
+    public float getEscalaPosicionX() {
+        return escalaPosicionX;
+    }
+
+    public float getEscalaPosicionY() {
+        return escalaPosicionY;
+    }
+
+    public float getAngulo() {
+        return angulo;
+    }
+
+    public float getMinX() {
+        return mMinX;
+    }
+
+    public float getMaxX() {
+        return mMaxX;
+    }
+
+    public float getMinY() {
+        return mMinY;
+    }
+
+    public float getMaxY() {
+        return mMaxY;
+    }
+
+
     protected void getMetricas(@NonNull Resources resources) {
         DisplayMetrics metrics = resources.getDisplayMetrics();
-        mDisplayWidth =
+        anchoPantalla =
                 (resources.getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
                         ? Math.max(metrics.widthPixels, metrics.heightPixels)
                         : Math.min(metrics.widthPixels, metrics.heightPixels);
-        mDisplayHeight =
+        alturaPantalla =
                 (resources.getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
                         ? Math.min(metrics.widthPixels, metrics.heightPixels)
                         : Math.max(metrics.widthPixels, metrics.heightPixels);
@@ -78,51 +123,51 @@ public abstract class EntradaMultiTouch implements Serializable {
      * Establecer la posición y la escala de una imagen en coordenadas de la pantalla
      */
     public boolean setPosicion(ControlesMultiTouch.PositionAndScale posicionYscala) {
-        float newScaleX;
-        float newScaleY;
+        float nuevaEscalaX;
+        float nuevaEscalaY;
 
         if ((mUIMode & UI_MODE_ANISOTROPIC_SCALE) != 0) {
-            newScaleX = posicionYscala.getScaleX();
+            nuevaEscalaX = posicionYscala.getScaleX();
         } else {
-            newScaleX = posicionYscala.getScale();
+            nuevaEscalaX = posicionYscala.getScale();
         }
 
         if ((mUIMode & UI_MODE_ANISOTROPIC_SCALE) != 0) {
-            newScaleY = posicionYscala.getScaleY();
+            nuevaEscalaY = posicionYscala.getScaleY();
         } else {
-            newScaleY = posicionYscala.getScale();
+            nuevaEscalaY = posicionYscala.getScale();
         }
 
         return setPosicion(posicionYscala.getXOff(),
                 posicionYscala.getYOff(),
-                newScaleX,
-                newScaleY,
+                nuevaEscalaX,
+                nuevaEscalaY,
                 posicionYscala.getAngle());
     }
 
     /**
      * Establecer la posición y la escala de una imagen en coordenadas de pantalla
      */
-    protected boolean setPosicion(float centerX, float centerY,
-                                  float scaleX, float scaleY, float angle) {
-        float ws = (mWidth / 2) * scaleX;
-        float hs = (mHeight / 2) * scaleY;
+    protected boolean setPosicion(float centroX, float centroY,
+                                  float escalaX, float escalaY, float anguloInicial) {
+        float ws = (float) (ancho / 2) * escalaX;
+        float hs = (float) (altura / 2) * escalaY;
 
-        mMinX = centerX - ws;
-        mMinY = centerY - hs;
-        mMaxX = centerX + ws;
-        mMaxY = centerY + hs;
+        mMinX = centroX - ws;
+        mMinY = centroY - hs;
+        mMaxX = centroX + ws;
+        mMaxY = centroY + hs;
 
-        mGrabAreaX1 = mMaxX - GRAB_AREA_SIZE;
-        mGrabAreaY1 = mMaxY - GRAB_AREA_SIZE;
+        mGrabAreaX1 = mMaxX - TAMANIO_GRAVEDAD_AREA;
+        mGrabAreaY1 = mMaxY - TAMANIO_GRAVEDAD_AREA;
         mGrabAreaX2 = mMaxX;
         mGrabAreaY2 = mMaxY;
 
-        mCentroX = centerX;
-        mCentroY = centerY;
-        mEscalaX = scaleX;
-        mEscalaY = scaleY;
-        mAngulo = angle;
+        posicionCentroX = centroX;
+        posicionCentroY = centroY;
+        escalaPosicionX = escalaX;
+        escalaPosicionY = escalaY;
+        angulo = anguloInicial;
 
         return true;
     }
@@ -142,59 +187,15 @@ public abstract class EntradaMultiTouch implements Serializable {
     public void reload(Context context) {
         // Hágale saber a la carga que las propiedades han cambiado, así que vuelva a cargarlas,
         // no retroceda y comience con los valores predeterminados
-        mFirstLoad = false;
-        load(context, mCentroX, mCentroY);
+        primeraCarga = false;
+        load(context, posicionCentroX, posicionCentroY);
     }
 
     public abstract void draw(Canvas canvas);
 
-    public abstract void load(Context context, float startMidX, float startMidY);
+    public abstract void load(Context context, float iniciarDireccionX, float iniciarDireccionY);
 
     public abstract void unload();
-
-    public int getWidth() {
-        return mWidth;
-    }
-
-    public int getHeight() {
-        return mHeight;
-    }
-
-    public float getCenterX() {
-        return mCentroX;
-    }
-
-    public float getCenterY() {
-        return mCentroY;
-    }
-
-    public float getScaleX() {
-        return mEscalaX;
-    }
-
-    public float getScaleY() {
-        return mEscalaY;
-    }
-
-    public float getAngle() {
-        return mAngulo;
-    }
-
-    public float getMinX() {
-        return mMinX;
-    }
-
-    public float getMaxX() {
-        return mMaxX;
-    }
-
-    public float getMinY() {
-        return mMinY;
-    }
-
-    public float getMaxY() {
-        return mMaxY;
-    }
 
     public void setIsGrabAreaSelected(boolean selected) {
         mIsGrabAreaSeleccionar = selected;
@@ -203,6 +204,4 @@ public abstract class EntradaMultiTouch implements Serializable {
     public boolean isGrabAreaSelected() {
         return mIsGrabAreaSeleccionar;
     }
-
-
 }

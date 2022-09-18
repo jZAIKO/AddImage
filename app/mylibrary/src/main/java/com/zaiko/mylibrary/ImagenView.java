@@ -220,12 +220,12 @@ public class ImagenView extends View implements ControlesMultiTouch.MultiTouchOb
      */
     public void getPositionAndScale(@NonNull EntradaMultiTouch img,
                                     @NonNull ControlesMultiTouch.PositionAndScale objPosAndScaleOut) {
-        objPosAndScaleOut.set(img.getCenterX(), img.getCenterY(),
+        objPosAndScaleOut.set(img.getPosicionCentroX(), img.getPosicionCentroY(),
                 (mUIMode & UI_MODE_ANISOTROPIC_SCALE) == 0,
-                (img.getScaleX() + img.getScaleY()) / 2,
-                (mUIMode & UI_MODE_ANISOTROPIC_SCALE) != 0, img.getScaleX(),
-                img.getScaleY(), (mUIMode & UI_MODE_ROTATE) != 0,
-                img.getAngle());
+                (img.getEscalaPosicionX() + img.getEscalaPosicionY()) / 2,
+                (mUIMode & UI_MODE_ANISOTROPIC_SCALE) != 0, img.getEscalaPosicionX(),
+                img.getEscalaPosicionY(), (mUIMode & UI_MODE_ROTATE) != 0,
+                img.getAngulo());
     }
 
     /**
